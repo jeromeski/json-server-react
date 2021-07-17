@@ -1,25 +1,18 @@
 {
 	"user": [
 		{
-			"name": "Adam",
-			"address": "London",
-			"email": "adam@email.com",
-			"contact": " 8363667",
-			"id": 1
+			"id": 1,
+			"name": "Leanne Graham",
+			"email": "Sincere@april.biz",
+			"contact": "1-770-736-8031 x56442",
+			"address": "Gwenborough"
 		},
 		{
-			"name": "Tommy",
-			"address": "Japan",
-			"email": "tom@gmail.com",
-			"contact": "8321312",
-			"id": 2
-		},
-		{
-			"name": "Jane",
-			"address": "Australia",
-			"email": "Jane@gmail.com",
-			"contact": "8057576",
-			"id": 3
+			"id": 2,
+			"name": "Ervin Howell",
+			"email": "Shanna@melissa.tv",
+			"contact": "010-692-6593 x09125",
+			"address": "Wisokyburgh"
 		}
 	]
 }

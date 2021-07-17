@@ -17,3 +17,20 @@ export const loadUsers = () => {
 			.catch((error) => console.log(error));
 	};
 };
+
+const userDeleted = () => ({
+	type: types.DELETE_USER
+});
+
+export const deleteUser = (id) => {
+	return function (dispatch) {
+		axios
+			.delete(`${process.env.REACT_APP_API}/${id}`)
+			.then((res) => {
+				console.log(res);
+				dispatch(userDeleted());
+				dispatch(getUsers());
+			})
+			.catch((error) => console.log(error));
+	};
+};

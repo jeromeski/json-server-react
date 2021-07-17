@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -7,65 +7,96 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { loadUsers } from "../../redux/actions";
+import { deleteUser, loadUsers } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, ButtonGroup } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
 	table: {
-		minWidth: 650
+		marginTop: 100,
+		minWidth: 900
 	}
 });
 
-function createData(name, email, contact, address, action) {
-	return { name, email, contact, address, action };
-}
-
-const rows = [
-	createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-	createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-	createData("Eclair", 262, 16.0, 24, 6.0),
-	createData("Cupcake", 305, 3.7, 67, 4.3),
-	createData("Gingerbread", 356, 16.0, 49, 3.9)
-];
+const useBtnStyles = makeStyles((theme) => ({
+	root: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		"& > *": {
+			margin: theme.spacing(1)
+		}
+	}
+}));
 
 export default function TableComponent() {
-	const { users } = useSelector((state) => ({ ...state }));
 	const dispatch = useDispatch();
+	const { users } = useSelector((state) => state.data);
+	const history = useHistory();
 
+	console.log(users);
 	useEffect(() => {
 		dispatch(loadUsers());
 	}, []);
 
-	console.log(users);
-
 	const classes = useStyles();
-	console.log(process.env.REACT_APP_API);
+	const btnStyles = useBtnStyles();
+
+	const handleDelete = (id) => {
+		if (window.confirm("Are you sure you want to delete this user?")) {
+			dispatch(deleteUser(id));
+		}
+	};
+
 	return (
-		<TableContainer component={Paper}>
-			<Table className={classes.table} aria-label="simple table">
-				<TableHead>
-					<TableRow>
-						<TableCell>Name</TableCell>
-						<TableCell align="right">Email</TableCell>
-						<TableCell align="right">Contact</TableCell>
-						<TableCell align="right">Address</TableCell>
-						<TableCell align="right">Action</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{rows.map((row) => (
-						<TableRow key={row.name}>
-							<TableCell component="th" scope="row">
-								{row.name}
-							</TableCell>
-							<TableCell align="right">{row.calories}</TableCell>
-							<TableCell align="right">{row.fat}</TableCell>
-							<TableCell align="right">{row.carbs}</TableCell>
-							<TableCell align="right">{row.protein}</TableCell>
+		<Fragment>
+			<Button
+				aria-label="contained primary button"
+				color="primary"
+				onClick={() => history.push("/addUser")}
+				variant="contained">
+				Add User
+			</Button>
+			<TableContainer component={Paper}>
+				<Table className={classes.table} aria-label="simple table">
+					<TableHead>
+						<TableRow>
+							<TableCell>Name</TableCell>
+							<TableCell align="center">Email</TableCell>
+							<TableCell align="center">Contact</TableCell>
+							<TableCell align="center">Address</TableCell>
+							<TableCell align="center">Action</TableCell>
 						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-		</TableContainer>
+					</TableHead>
+					<TableBody>
+						{users &&
+							users.map((user) => (
+								<TableRow key={user.id}>
+									<TableCell component="th" scope="row">
+										{user.name}
+									</TableCell>
+									<TableCell align="center">{user.email}</TableCell>
+									<TableCell align="center">{user.contact}</TableCell>
+									<TableCell align="center">{user.address}</TableCell>
+									<TableCell align="center">
+										<div className={btnStyles.root}>
+											<ButtonGroup variant="contained" aria-label="contained primary button group">
+												<Button
+													style={{ marginRight: "5px" }}
+													color="secondary"
+													onClick={() => handleDelete(user.id)}>
+													Delete
+												</Button>
+												<Button color="primary">Edit</Button>
+											</ButtonGroup>
+										</div>
+									</TableCell>
+								</TableRow>
+							))}
+					</TableBody>
+				</Table>
+			</TableContainer>
+		</Fragment>
 	);
 }
