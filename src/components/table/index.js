@@ -35,7 +35,6 @@ export default function TableComponent() {
 	const { users } = useSelector((state) => state.data);
 	const history = useHistory();
 
-	console.log(users);
 	useEffect(() => {
 		dispatch(loadUsers());
 	}, []);

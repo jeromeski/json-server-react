@@ -6,6 +6,14 @@ const getUsers = (users) => ({
 	payload: users
 });
 
+const userDeleted = () => ({
+	type: types.DELETE_USER
+});
+
+const userAdded = () => ({
+	type: types.ADD_USER
+});
+
 export const loadUsers = () => {
 	return function (dispatch) {
 		axios
@@ -18,10 +26,6 @@ export const loadUsers = () => {
 	};
 };
 
-const userDeleted = () => ({
-	type: types.DELETE_USER
-});
-
 export const deleteUser = (id) => {
 	return function (dispatch) {
 		axios
@@ -29,7 +33,20 @@ export const deleteUser = (id) => {
 			.then((res) => {
 				console.log(res);
 				dispatch(userDeleted());
-				dispatch(getUsers());
+				dispatch(loadUsers());
+			})
+			.catch((error) => console.log(error));
+	};
+};
+
+export const addUser = (user) => {
+	return function (dispatch) {
+		axios
+			.post(`${process.env.REACT_APP_API}`, user)
+			.then((res) => {
+				console.log(res);
+				dispatch(userAdded());
+				// dispatch(loadUsers());
 			})
 			.catch((error) => console.log(error));
 	};
