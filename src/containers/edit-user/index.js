@@ -3,10 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { Button } from "@material-ui/core";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addUser } from "../../redux/actions";
-import _ from "lodash-uuid";
+import { useHistory, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser, getSingleUser } from "../../redux/actions";
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -17,11 +17,12 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-function FormContainer() {
+function EditContainer() {
 	const classes = useStyles();
 
 	const history = useHistory();
 	const dispatch = useDispatch();
+	const { id } = useParams();
 
 	const [values, setValues] = useState({
 		name: "",
@@ -33,13 +34,16 @@ function FormContainer() {
 
 	const { name, email, contact, address } = values;
 
+	const { data } = useSelector((state) => ({ ...state }));
+	const { user } = data;
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (!name || !email || !contact || !address) {
 			setError("Please fill up all input fields");
 			return;
 		} else {
-			dispatch(addUser(values));
+			dispatch(updateUser(id, values));
 			history.push("/");
 			setError("");
 		}
@@ -54,19 +58,29 @@ function FormContainer() {
 		setValues({ ...values, [name]: value });
 	};
 
+	useEffect(() => {
+		// id taken from params
+		dispatch(getSingleUser(id));
+	}, []);
+
+	useEffect(() => {
+		if (user) {
+			setValues({ ...user });
+		}
+	}, [user]);
+
 	return (
 		<div>
 			<Button variant="contained" color="secondary" onClick={() => history.push("/")}>
 				Back
 			</Button>
 			<form className={classes.root} noValidate autoComplete="off" onSubmit={handleSubmit}>
-				<br />
 				<TextField
 					id="standard-basic"
 					type="text"
 					label="Name"
 					name="name"
-					value={name}
+					value={name || ""}
 					// onChange={handleInputChange("name")}
 					onChange={handleInputChange}
 					helperText={error}
@@ -77,7 +91,7 @@ function FormContainer() {
 					label="Email"
 					type="email"
 					name="email"
-					value={email}
+					value={email || ""}
 					onChange={handleInputChange}
 					// onChange={handleInputChange("email")}
 					helperText={error}
@@ -88,7 +102,7 @@ function FormContainer() {
 					label="Contact"
 					type="text"
 					name="contact"
-					value={contact}
+					value={contact || ""}
 					onChange={handleInputChange}
 					// onChange={handleInputChange("contact")}
 					helperText={error}
@@ -99,18 +113,18 @@ function FormContainer() {
 					label="Address"
 					type="text"
 					name="address"
-					value={address}
+					value={address || ""}
 					onChange={handleInputChange}
 					// onChange={handleInputChange("address")}
 					helperText={error}
 				/>
 				<br />
 				<Button variant="contained" color="primary" type="submit">
-					Add User
+					Confirm Changes
 				</Button>
 			</form>
 		</div>
 	);
 }
 
-export default FormContainer;
+export default EditContainer;

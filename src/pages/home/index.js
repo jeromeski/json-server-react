@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
-import TableContainer from "../../containers/table/TableContainer";
+import TableContainer from "../../containers/table";
+
 
 function Home() {
 	return (

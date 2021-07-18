@@ -1,19 +1,11 @@
 {
-  "user": [
+  "users": [
     {
-      "id": "4",
-      "name": "Jerome Gacoscosim",
-      "email": "jerome.fullstack@gmail.com",
-      "contact": "12321412141",
-      "address": "B15 L9 Rome Palmera 4"
-    },
-    {
-      "id": "1",
-      "name": "Jerome Gacoscosim",
-      "email": "jerome.fullstack@gmail.com",
-      "contact": "1232142121512",
-      "address": "B15 L9 Rome Palmera 4",
-      "text": "B15 L9 Rome Palmera 4"
+      "name": "Maria",
+      "email": "joma@email.com",
+      "contact": "09532424234234",
+      "address": "Fairview Manila",
+      "id": 2
     }
   ]
 }

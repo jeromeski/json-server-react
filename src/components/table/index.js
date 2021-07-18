@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -7,10 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { deleteUser, loadUsers } from "../../redux/actions";
-import { useDispatch, useSelector } from "react-redux";
 import { Button, ButtonGroup } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
 	table: {
@@ -30,23 +27,9 @@ const useBtnStyles = makeStyles((theme) => ({
 	}
 }));
 
-export default function TableComponent() {
-	const dispatch = useDispatch();
-	const { users } = useSelector((state) => state.data);
-	const history = useHistory();
-
-	useEffect(() => {
-		dispatch(loadUsers());
-	}, []);
-
+export default function TableComponent({ users, history, handleDelete }) {
 	const classes = useStyles();
 	const btnStyles = useBtnStyles();
-
-	const handleDelete = (id) => {
-		if (window.confirm("Are you sure you want to delete this user?")) {
-			dispatch(deleteUser(id));
-		}
-	};
 
 	return (
 		<Fragment>
@@ -87,7 +70,11 @@ export default function TableComponent() {
 													onClick={() => handleDelete(user.id)}>
 													Delete
 												</Button>
-												<Button color="primary">Edit</Button>
+												<Button
+													onClick={() => history.push(`/editUser/${user.id}`)}
+													color="primary">
+													Edit
+												</Button>
 											</ButtonGroup>
 										</div>
 									</TableCell>
